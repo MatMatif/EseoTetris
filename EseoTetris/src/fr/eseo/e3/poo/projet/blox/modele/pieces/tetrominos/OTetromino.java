@@ -1,25 +1,23 @@
 package fr.eseo.e3.poo.projet.blox.modele.pieces.tetrominos;
 
 import fr.eseo.e3.poo.projet.blox.modele.Coordonnees;
+import fr.eseo.e3.poo.projet.blox.modele.Couleur;
 import fr.eseo.e3.poo.projet.blox.modele.Element;
-import fr.eseo.e3.poo.projet.blox.modele.Puits;
 
-public class OTetromino extends Tetromino{
-	
-	private Element[] elements;
-	
-	public OTetromino(Coordonnees coordonnes, Couleur couleur ) {
-        // On initialise le tableau pour qu'il puisse contenir exactement 4 cases
-        this.elements = new Element[4];
-	}
+public class OTetromino extends Tetromino {
 
-	public Element[] getElements() {
-		return elements;
-	}
+    public OTetromino(Coordonnees coordonnees, Couleur couleur) {
+        super(coordonnees, couleur);
+    }
 
-	public void setElements(Element[] elements) {
-		this.elements = elements;
-	}
-    
-	
+    @Override
+    protected void setElements(Coordonnees coordonnees, Couleur couleur) {
+        int x = coordonnees.getAbscisse();
+        int y = coordonnees.getOrdonnee();
+
+        getElements()[0] = new Element(x, y, couleur);
+        getElements()[1] = new Element(x + 1, y, couleur);
+        getElements()[2] = new Element(x, y - 1, couleur);
+        getElements()[3] = new Element(x + 1, y - 1, couleur);
+    }
 }
