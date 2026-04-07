@@ -38,6 +38,47 @@ public abstract class Tetromino implements Piece {
     }
 
     @Override
+    public void deplacerDe(int deltaX, int deltaY) throws IllegalArgumentException {
+        if (deltaY < 0) {
+            throw new IllegalArgumentException("Déplacement vers le haut interdit.");
+        }
+        if (Math.abs(deltaX) > 1 || deltaY > 1) {
+            throw new IllegalArgumentException("Déplacement trop important (> 1).");
+        }
+        if (Math.abs(deltaX) == 1 && deltaY == 1) {
+            throw new IllegalArgumentException("Déplacement diagonal interdit.");
+        }
+
+        for (Element element : this.elements) {
+            element.deplacerDe(deltaX, deltaY);
+        }
+    }
+
+    @Override
+    public void tourner(boolean sensHoraire) {
+        Element refElement = this.elements[0];
+        int xRef = refElement.getCoordonnees().getAbscisse();
+        int yRef = refElement.getCoordonnees().getOrdonnee();
+
+        for (int i = 1; i < this.elements.length; i++) {
+            int xRel = this.elements[i].getCoordonnees().getAbscisse() - xRef;
+            int yRel = this.elements[i].getCoordonnees().getOrdonnee() - yRef;
+            int newX, newY;
+
+            if (sensHoraire) {
+                newX = -yRel;
+                newY = xRel;
+            } else {
+                newX = yRel;
+                newY = -xRel;
+            }
+
+            this.elements[i].getCoordonnees().setAbscisse(xRef + newX);
+            this.elements[i].getCoordonnees().setOrdonnee(yRef + newY);
+        }
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName()).append(" :\n");

@@ -20,4 +20,9 @@ public class OTetromino extends Tetromino {
         getElements()[2] = new Element(x, y - 1, couleur);
         getElements()[3] = new Element(x + 1, y - 1, couleur);
     }
+
+    @Override
+    public void tourner(boolean sensHoraire) {
+        // Le OTetromino ne tourne pas
+    }
 }

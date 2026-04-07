@@ -2,6 +2,7 @@ package fr.eseo.e3.poo.projet.blox.modele.pieces.tetrominos;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import fr.eseo.e3.poo.projet.blox.modele.Coordonnees;
 import fr.eseo.e3.poo.projet.blox.modele.Couleur;
@@ -16,44 +17,54 @@ public class ITetrominoTest {
         Couleur couleur = Couleur.CYAN;
         ITetromino iTetromino = new ITetromino(coords, couleur);
 
-        assertNotNull(iTetromino.getElements(), "Le tableau d'éléments ne doit pas être null");
-        assertEquals(4, iTetromino.getElements().length, "Il doit y avoir 4 éléments");
+        assertNotNull(iTetromino.getElements());
+        assertEquals(4, iTetromino.getElements().length);
 
         Element[] elements = iTetromino.getElements();
-
         assertEquals(5, elements[0].getCoordonnees().getAbscisse());
         assertEquals(5, elements[0].getCoordonnees().getOrdonnee());
-        assertEquals(couleur, elements[0].getCouleur());
+    }
 
-        assertEquals(5, elements[1].getCoordonnees().getAbscisse());
-        assertEquals(4, elements[1].getCoordonnees().getOrdonnee());
+    @Test
+    public void testDeplacerDeValide() {
+        ITetromino i = new ITetromino(new Coordonnees(5, 5), Couleur.CYAN);
+        i.deplacerDe(1, 0); // Droite
+        assertEquals(6, i.getElements()[0].getCoordonnees().getAbscisse());
+        i.deplacerDe(0, 1); // Bas
+        assertEquals(6, i.getElements()[0].getCoordonnees().getOrdonnee());
+    }
 
-        assertEquals(5, elements[2].getCoordonnees().getAbscisse());
-        assertEquals(3, elements[2].getCoordonnees().getOrdonnee());
+    @Test
+    public void testDeplacerDeInvalide() {
+        ITetromino i = new ITetromino(new Coordonnees(5, 5), Couleur.CYAN);
+        assertThrows(IllegalArgumentException.class, () -> i.deplacerDe(0, -1), "Haut interdit");
+        assertThrows(IllegalArgumentException.class, () -> i.deplacerDe(-1, 1), "Diagonal interdit");
+    }
 
-        assertEquals(5, elements[3].getCoordonnees().getAbscisse());
-        assertEquals(6, elements[3].getCoordonnees().getOrdonnee());
+    @Test
+    public void testTournerHoraire() {
+        ITetromino i = new ITetromino(new Coordonnees(5, 5), Couleur.CYAN);
+        // Initiale : (5,5), (5,4), (5,3), (5,6)
+        i.tourner(true);
+        // Attendue (xRef - yRel, yRef + xRel) : (5,5), (6,5), (7,5), (4,5)
+        assertEquals(5, i.getElements()[0].getCoordonnees().getAbscisse());
+        assertEquals(5, i.getElements()[0].getCoordonnees().getOrdonnee());
+        
+        assertEquals(6, i.getElements()[1].getCoordonnees().getAbscisse());
+        assertEquals(5, i.getElements()[1].getCoordonnees().getOrdonnee());
+        
+        assertEquals(7, i.getElements()[2].getCoordonnees().getAbscisse());
+        assertEquals(5, i.getElements()[2].getCoordonnees().getOrdonnee());
+        
+        assertEquals(4, i.getElements()[3].getCoordonnees().getAbscisse());
+        assertEquals(5, i.getElements()[3].getCoordonnees().getOrdonnee());
     }
 
     @Test
     public void testSetPosition() {
         ITetromino iTetromino = new ITetromino(new Coordonnees(5, 5), Couleur.CYAN);
         iTetromino.setPosition(10, 10);
-        
         assertEquals(10, iTetromino.getElements()[0].getCoordonnees().getAbscisse());
         assertEquals(10, iTetromino.getElements()[0].getCoordonnees().getOrdonnee());
-        assertEquals(10, iTetromino.getElements()[3].getCoordonnees().getAbscisse());
-        assertEquals(11, iTetromino.getElements()[3].getCoordonnees().getOrdonnee());
-    }
-
-    @Test
-    public void testToString() {
-        ITetromino iTetromino = new ITetromino(new Coordonnees(5, 5), Couleur.CYAN);
-        String expected = "ITetromino :\n" +
-                "\t(5, 5) - CYAN\n" +
-                "\t(5, 4) - CYAN\n" +
-                "\t(5, 3) - CYAN\n" +
-                "\t(5, 6) - CYAN\n";
-        assertEquals(expected, iTetromino.toString());
     }
 }

@@ -8,4 +8,6 @@ public interface Piece {
     public void setPosition(int abscisse, int ordonnee);
     public Puits getPuits();
     public void setPuits(Puits puits);
+    public void deplacerDe(int deltaX, int deltaY) throws IllegalArgumentException;
+    public void tourner(boolean sensHoraire);
 }

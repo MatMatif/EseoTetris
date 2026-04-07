@@ -1,14 +1,15 @@
 package fr.eseo.e3.poo.projet.blox.modele;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-class ElementTest {
+public class ElementTest {
 
-	@Test
-	void test() {
-		fail("Not yet implemented");
-	}
-
+    @Test
+    public void testDeplacerDe() {
+        Element element = new Element(new Coordonnees(10, 10), Couleur.ROUGE);
+        element.deplacerDe(1, 2);
+        assertEquals(11, element.getCoordonnees().getAbscisse(), "L'abscisse doit être 11");
+        assertEquals(12, element.getCoordonnees().getOrdonnee(), "L'ordonnée doit être 12");
+    }
 }

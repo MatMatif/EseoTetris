@@ -58,4 +58,9 @@ public class Element {
     public String toString() {
         return coordonnees.toString() + " - " + couleur;
     }
+
+    public void deplacerDe(int deltaX, int deltaY) {
+        this.coordonnees.setAbscisse(this.coordonnees.getAbscisse() + deltaX);
+        this.coordonnees.setOrdonnee(this.coordonnees.getOrdonnee() + deltaY);
+    }
 }
