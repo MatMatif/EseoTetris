@@ -15,15 +15,25 @@ public class Puits {
     private Piece pieceActuelle;
     private Piece pieceSuivante;
     private PropertyChangeSupport pcs;
+    private Tas tas;
 
     public Puits() {
         this(LARGEUR_PAR_DEFAUT, PROFONDEUR_PAR_DEFAUT);
     }
 
     public Puits(int largeur, int profondeur) {
+        this(largeur, profondeur, 0, 0);
+    }
+
+    public Puits(int largeur, int profondeur, int nbElements, int nbLignes) {
         this.setLargeur(largeur);
         this.setProfondeur(profondeur);
         this.pcs = new PropertyChangeSupport(this);
+        if (nbElements > 0) {
+            this.setTas(new Tas(this, nbElements, nbLignes));
+        } else {
+            this.setTas(new Tas(this));
+        }
     }
 
     public int getLargeur() {
@@ -56,6 +66,14 @@ public class Puits {
         return pieceSuivante;
     }
 
+    public Tas getTas() {
+        return tas;
+    }
+
+    public void setTas(Tas tas) {
+        this.tas = tas;
+    }
+
     public void setPieceSuivante(Piece piece) {
         if (this.pieceSuivante != null) {
             Piece anciennePieceActuelle = this.pieceActuelle;
@@ -84,9 +102,8 @@ public class Puits {
         StringBuilder sb = new StringBuilder();
         sb.append("Puits : Dimension ").append(this.largeur).append(" x ").append(this.profondeur).append("\n");
         sb.append("Piece Actuelle : ").append(this.pieceActuelle == null ? "<aucune>" : this.pieceActuelle.toString());
-        if (this.pieceActuelle != null && !this.pieceActuelle.toString().endsWith("\n")) {
-            sb.append("\n");
-        } else if (this.pieceActuelle == null) {
+        // Normalisation de la fin de ligne
+        if (this.pieceActuelle != null && !sb.toString().endsWith("\n")) {
             sb.append("\n");
         }
         sb.append("Piece Suivante : ").append(this.pieceSuivante == null ? "<aucune>" : this.pieceSuivante.toString());

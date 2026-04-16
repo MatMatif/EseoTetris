@@ -15,9 +15,10 @@ public class ITetromino extends Tetromino {
         int x = coordonnees.getAbscisse();
         int y = coordonnees.getOrdonnee();
 
-        getElements()[0] = new Element(x, y, couleur);
-        getElements()[1] = new Element(x, y - 1, couleur);
-        getElements()[2] = new Element(x, y - 2, couleur);
-        getElements()[3] = new Element(x, y + 1, couleur);
+        getElements().clear();
+        getElements().add(new Element(x, y, couleur));
+        getElements().add(new Element(x, y - 1, couleur));
+        getElements().add(new Element(x, y - 2, couleur));
+        getElements().add(new Element(x, y + 1, couleur));
     }
 }

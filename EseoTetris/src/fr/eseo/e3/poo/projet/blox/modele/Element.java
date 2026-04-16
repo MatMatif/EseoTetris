@@ -30,7 +30,7 @@ public class Element {
         return coordonnees;
     }
 
-    public void setCoordonnees(Coordonnees coordonnees) {
+    public void setCoordonnnees(Coordonnees coordonnees) {
         this.coordonnees = coordonnees;
     }
 
@@ -63,4 +63,7 @@ public class Element {
         this.coordonnees.setAbscisse(this.coordonnees.getAbscisse() + deltaX);
         this.coordonnees.setOrdonnee(this.coordonnees.getOrdonnee() + deltaY);
     }
+
+
+
 }

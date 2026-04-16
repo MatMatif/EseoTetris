@@ -1,22 +1,22 @@
 package fr.eseo.e3.poo.projet.blox.modele.pieces.tetrominos;
 
-import fr.eseo.e3.poo.projet.blox.modele.Coordonnees;
-import fr.eseo.e3.poo.projet.blox.modele.Couleur;
-import fr.eseo.e3.poo.projet.blox.modele.Element;
-import fr.eseo.e3.poo.projet.blox.modele.Puits;
+import fr.eseo.e3.poo.projet.blox.modele.*;
 import fr.eseo.e3.poo.projet.blox.modele.pieces.Piece;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Tetromino implements Piece {
-    private Element[] elements;
+    private List<Element> elements;
     private Puits puits;
 
     public Tetromino(Coordonnees coordonnees, Couleur couleur) {
-        this.elements = new Element[4];
+        this.elements = new ArrayList<>();
         this.setElements(coordonnees, couleur);
     }
 
     @Override
-    public Element[] getElements() {
+    public List<Element> getElements() {
         return elements;
     }
 
@@ -24,7 +24,7 @@ public abstract class Tetromino implements Piece {
 
     @Override
     public void setPosition(int abscisse, int ordonnee) {
-        this.setElements(new Coordonnees(abscisse, ordonnee), this.elements[0].getCouleur());
+        this.setElements(new Coordonnees(abscisse, ordonnee), this.elements.get(0).getCouleur());
     }
 
     @Override
@@ -38,7 +38,7 @@ public abstract class Tetromino implements Piece {
     }
 
     @Override
-    public void deplacerDe(int deltaX, int deltaY) throws IllegalArgumentException {
+    public void deplacerDe(int deltaX, int deltaY) throws IllegalArgumentException, BloxException {
         if (deltaY < 0) {
             throw new IllegalArgumentException("Déplacement vers le haut interdit.");
         }
@@ -50,31 +50,72 @@ public abstract class Tetromino implements Piece {
         }
 
         for (Element element : this.elements) {
+            int newX = element.getCoordonnees().getAbscisse() + deltaX;
+            int newY = element.getCoordonnees().getOrdonnee() + deltaY;
+
+            if (this.puits != null) {
+                if (newX < 0 || newX >= this.puits.getLargeur()) {
+                    throw new BloxException("Sortie de puits horizontale", BloxException.BLOX_SORTIE_PUITS);
+                }
+                if (newY >= this.puits.getProfondeur()) {
+                    throw new BloxException("Collision avec le fond", BloxException.BLOX_COLLISION);
+                }
+                if (this.puits.getTas().elementExists(newX, newY)) {
+                    throw new BloxException("Collision avec le tas", BloxException.BLOX_COLLISION);
+                }
+            }
+        }
+
+        for (Element element : this.elements) {
             element.deplacerDe(deltaX, deltaY);
         }
     }
 
     @Override
-    public void tourner(boolean sensHoraire) {
-        Element refElement = this.elements[0];
+    public void tourner(boolean sensHoraire) throws BloxException {
+        Element refElement = this.elements.get(0);
         int xRef = refElement.getCoordonnees().getAbscisse();
         int yRef = refElement.getCoordonnees().getOrdonnee();
 
-        for (int i = 1; i < this.elements.length; i++) {
-            int xRel = this.elements[i].getCoordonnees().getAbscisse() - xRef;
-            int yRel = this.elements[i].getCoordonnees().getOrdonnee() - yRef;
-            int newX, newY;
+        int[] nextX = new int[this.elements.size()];
+        int[] nextY = new int[this.elements.size()];
 
-            if (sensHoraire) {
-                newX = -yRel;
-                newY = xRel;
+        for (int i = 0; i < this.elements.size(); i++) {
+            if (i == 0) {
+                nextX[i] = xRef;
+                nextY[i] = yRef;
             } else {
-                newX = yRel;
-                newY = -xRel;
+                int xRel = this.elements.get(i).getCoordonnees().getAbscisse() - xRef;
+                int yRel = this.elements.get(i).getCoordonnees().getOrdonnee() - yRef;
+                int rotatedX, rotatedY;
+
+                if (sensHoraire) {
+                    rotatedX = -yRel;
+                    rotatedY = xRel;
+                } else {
+                    rotatedX = yRel;
+                    rotatedY = -xRel;
+                }
+                nextX[i] = xRef + rotatedX;
+                nextY[i] = yRef + rotatedY;
             }
 
-            this.elements[i].getCoordonnees().setAbscisse(xRef + newX);
-            this.elements[i].getCoordonnees().setOrdonnee(yRef + newY);
+            if (this.puits != null) {
+                if (nextX[i] < 0 || nextX[i] >= this.puits.getLargeur()) {
+                    throw new BloxException("Rotation sort du puits", BloxException.BLOX_SORTIE_PUITS);
+                }
+                if (nextY[i] >= this.puits.getProfondeur()) {
+                    throw new BloxException("Rotation collision fond", BloxException.BLOX_COLLISION);
+                }
+                if (this.puits.getTas().elementExists(nextX[i], nextY[i])) {
+                    throw new BloxException("Rotation collision tas", BloxException.BLOX_COLLISION);
+                }
+            }
+        }
+
+        for (int i = 1; i < this.elements.size(); i++) {
+            this.elements.get(i).getCoordonnees().setAbscisse(nextX[i]);
+            this.elements.get(i).getCoordonnees().setOrdonnee(nextY[i]);
         }
     }
 

@@ -30,16 +30,16 @@ public class VuePiece {
     }
 
     protected void afficherPiece(Graphics2D g2D) {
-        Element[] elements = piece.getElements();
-        for (int i = 0; i < elements.length; i++) {
-            Color couleurBase = elements[i].getCouleur().getCouleurPourAffichage();
+        java.util.List<Element> elements = piece.getElements();
+        for (int i = 0; i < elements.size(); i++) {
+            Color couleurBase = elements.get(i).getCouleur().getCouleurPourAffichage();
             if (i == 0) {
                 g2D.setColor(teinte(couleurBase));
             } else {
                 g2D.setColor(couleurBase);
             }
-            g2D.fill3DRect(elements[i].getCoordonnees().getAbscisse() * taille,
-                           elements[i].getCoordonnees().getOrdonnee() * taille,
+            g2D.fill3DRect(elements.get(i).getCoordonnees().getAbscisse() * taille,
+                           elements.get(i).getCoordonnees().getOrdonnee() * taille,
                            taille, taille, true);
         }
     }

@@ -29,6 +29,20 @@ public class PuitsTest {
     }
 
     @Test
+    public void testTasInitialise() {
+        Puits puits = new Puits();
+        assertNotNull(puits.getTas());
+        assertEquals(0, puits.getTas().getElements().size());
+    }
+
+    @Test
+    public void testConstructeurQuatreArguments() {
+        Puits puits = new Puits(10, 20, 5, 2);
+        assertNotNull(puits.getTas());
+        assertEquals(5, puits.getTas().getElements().size());
+    }
+
+    @Test
     public void testSetPieceSuivante() {
         Puits puits = new Puits(10, 20);
         OTetromino p1 = new OTetromino(new Coordonnees(0, 0), Couleur.ROUGE);
@@ -43,8 +57,8 @@ public class PuitsTest {
         assertEquals(p2, puits.getPieceSuivante());
         assertEquals(p1, puits.getPieceActuelle());
         // Vérification de la position (largeur/2, -4) -> (5, -4)
-        assertEquals(5, p1.getElements()[0].getCoordonnees().getAbscisse());
-        assertEquals(-4, p1.getElements()[0].getCoordonnees().getOrdonnee());
+        assertEquals(5, p1.getElements().get(0).getCoordonnees().getAbscisse());
+        assertEquals(-4, p1.getElements().get(0).getCoordonnees().getOrdonnee());
     }
 
     @Test
@@ -66,8 +80,6 @@ public class PuitsTest {
                 "\t(7, 6) - ROUGE\n" +
                 "\t(7, 9) - ROUGE\n";
         
-        // Note: L'ordre des éléments dans ITetromino dépend de setElements. 
-        // Ma version est : (x,y), (x,y-1), (x,y-2), (x,y+1)
         assertEquals(expectedSuivante, puits.toString());
     }
 }
