@@ -56,24 +56,23 @@ public class OTetrominoTest {
     @Test
     public void testTourner() throws BloxException {
         OTetromino o = new OTetromino(new Coordonnees(5, 5), Couleur.CYAN);
-        java.util.List<Coordonnees> initiales = new java.util.ArrayList<>();
-        for(Element e : o.getElements()) {
-            initiales.add(new Coordonnees(e.getCoordonnees().getAbscisse(), e.getCoordonnees().getOrdonnee()));
-        }
+        // Elements: (5,5), (6,5), (5,4), (6,4)
         
         // Sens horaire
         o.tourner(true);
-        for(int idx = 0; idx < 4; idx++) {
-            assertEquals(initiales.get(idx).getAbscisse(), o.getElements().get(idx).getCoordonnees().getAbscisse());
-            assertEquals(initiales.get(idx).getOrdonnee(), o.getElements().get(idx).getCoordonnees().getOrdonnee());
-        }
+        // Nouveaux elements attendus: (5,5), (5,6), (6,5), (6,6)
+        assertEquals(new Coordonnees(5, 5), o.getElements().get(0).getCoordonnees(), "Rotation horaire: el 0");
+        assertEquals(new Coordonnees(5, 6), o.getElements().get(1).getCoordonnees(), "Rotation horaire: el 1");
+        assertEquals(new Coordonnees(6, 5), o.getElements().get(2).getCoordonnees(), "Rotation horaire: el 2");
+        assertEquals(new Coordonnees(6, 6), o.getElements().get(3).getCoordonnees(), "Rotation horaire: el 3");
 
-        // Sens anti-horaire
+        // Sens anti-horaire pour revenir à l'état initial
         o.tourner(false);
-        for(int idx = 0; idx < 4; idx++) {
-            assertEquals(initiales.get(idx).getAbscisse(), o.getElements().get(idx).getCoordonnees().getAbscisse());
-            assertEquals(initiales.get(idx).getOrdonnee(), o.getElements().get(idx).getCoordonnees().getOrdonnee());
-        }
+        // Nouveaux elements attendus: (5,5), (6,5), (5,4), (6,4)
+        assertEquals(new Coordonnees(5, 5), o.getElements().get(0).getCoordonnees(), "Rotation anti-horaire: el 0");
+        assertEquals(new Coordonnees(6, 5), o.getElements().get(1).getCoordonnees(), "Rotation anti-horaire: el 1");
+        assertEquals(new Coordonnees(5, 4), o.getElements().get(2).getCoordonnees(), "Rotation anti-horaire: el 2");
+        assertEquals(new Coordonnees(6, 4), o.getElements().get(3).getCoordonnees(), "Rotation anti-horaire: el 3");
     }
 
     @Test

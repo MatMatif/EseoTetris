@@ -31,13 +31,5 @@ public class OTetromino extends Tetromino {
         getElements().add(new Element(x + 1, y - 1, couleur));
     }
 
-    /**
-     * La rotation d'un OTetromino est sans effet.
-     * La méthode est surchargée pour ne rien faire.
-     * @param sensHoraire non utilisé
-     */
-    @Override
-    public void tourner(boolean sensHoraire) throws BloxException {
-        // La rotation d'un bloc carré n'a aucun effet. L'implémentation est donc vide.
-    }
+
 }
