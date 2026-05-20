@@ -32,9 +32,12 @@ public class OTetromino extends Tetromino {
     }
 
     /**
-     * @param sensHoraire vrai pour une rotation horaire, faux pour anti-horaire
+     * La rotation d'un OTetromino est sans effet.
+     * La méthode est surchargée pour ne rien faire.
+     * @param sensHoraire non utilisé
      */
     @Override
     public void tourner(boolean sensHoraire) throws BloxException {
+        // La rotation d'un bloc carré n'a aucun effet. L'implémentation est donc vide.
     }
 }

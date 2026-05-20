@@ -49,7 +49,7 @@ public class Element {
     /**
      * @param coordonnees les nouvelles coordonnées
      */
-    public void setCoordonnnees(Coordonnees coordonnees) {
+    public void setCoordonnees(Coordonnees coordonnees) {
         this.coordonnees = coordonnees;
     }
 
