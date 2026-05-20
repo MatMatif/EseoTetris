@@ -6,6 +6,10 @@ public class Coordonnees {
     private int abscisse;
     private int ordonnee;
 
+    /**
+     * @param abscisse l'abscisse
+     * @param ordonnee l'ordonnée
+     */
     public Coordonnees(int abscisse, int ordonnee) {
         this.abscisse = abscisse;
         this.ordonnee = ordonnee;
@@ -15,6 +19,9 @@ public class Coordonnees {
         return abscisse;
     }
 
+    /**
+     * @param abscisse la nouvelle abscisse
+     */
     public void setAbscisse(int abscisse) {
         this.abscisse = abscisse;
     }
@@ -23,10 +30,16 @@ public class Coordonnees {
         return ordonnee;
     }
 
+    /**
+     * @param ordonnee la nouvelle ordonnée
+     */
     public void setOrdonnee(int ordonnee) {
         this.ordonnee = ordonnee;
     }
 
+    /**
+     * @param o l'objet à comparer
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

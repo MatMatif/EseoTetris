@@ -6,6 +6,10 @@ public class BloxException extends Exception {
 
     private final int type;
 
+    /**
+     * @param message le message d'erreur
+     * @param type le type de l'exception
+     */
     public BloxException(String message, int type) {
         super(message);
         this.type = type;

@@ -13,6 +13,9 @@ public enum Couleur {
 
     private final Color couleurPourAffichage;
 
+    /**
+     * @param couleurPourAffichage la couleur AWT associée
+     */
     private Couleur(Color couleurPourAffichage) {
         this.couleurPourAffichage = couleurPourAffichage;
     }

@@ -107,7 +107,7 @@ public class ITetrominoTest {
         for(int idx = 0; idx < 4; idx++) {
             assertEquals(initiales.get(idx).getAbscisse(), i.getElements().get(idx).getCoordonnees().getAbscisse());
             assertEquals(initiales.get(idx).getOrdonnee(), i.getElements().get(idx).getCoordonnees().getOrdonnee());
-        }
+            }
     }
 
     @Test

@@ -1,6 +1,7 @@
 package fr.eseo.e3.poo.projet.blox.modele;
 
 import fr.eseo.e3.poo.projet.blox.modele.pieces.Piece;
+import fr.eseo.e3.poo.projet.blox.modele.pieces.UsineDePiece;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -21,10 +22,20 @@ public class Puits {
         this(LARGEUR_PAR_DEFAUT, PROFONDEUR_PAR_DEFAUT);
     }
 
+    /**
+     * @param largeur la largeur
+     * @param profondeur la profondeur
+     */
     public Puits(int largeur, int profondeur) {
         this(largeur, profondeur, 0, 0);
     }
 
+    /**
+     * @param largeur la largeur
+     * @param profondeur la profondeur
+     * @param nbElements nombre d'éléments initial dans le tas
+     * @param nbLignes nombre de lignes initiales dans le tas
+     */
     public Puits(int largeur, int profondeur, int nbElements, int nbLignes) {
         this.setLargeur(largeur);
         this.setProfondeur(profondeur);
@@ -40,6 +51,9 @@ public class Puits {
         return largeur;
     }
 
+    /**
+     * @param largeur la nouvelle largeur
+     */
     public void setLargeur(int largeur) {
         if (largeur < 5 || largeur > 15) {
             throw new IllegalArgumentException("Largeur hors limites [5, 15] : " + largeur);
@@ -51,6 +65,9 @@ public class Puits {
         return profondeur;
     }
 
+    /**
+     * @param profondeur la nouvelle profondeur
+     */
     public void setProfondeur(int profondeur) {
         if (profondeur < 15 || profondeur > 25) {
             throw new IllegalArgumentException("Profondeur hors limites [15, 25] : " + profondeur);
@@ -70,10 +87,16 @@ public class Puits {
         return tas;
     }
 
+    /**
+     * @param tas le nouveau tas
+     */
     public void setTas(Tas tas) {
         this.tas = tas;
     }
 
+    /**
+     * @param piece la nouvelle pièce suivante
+     */
     public void setPieceSuivante(Piece piece) {
         if (this.pieceSuivante != null) {
             Piece anciennePieceActuelle = this.pieceActuelle;
@@ -89,10 +112,24 @@ public class Puits {
         this.pcs.firePropertyChange(MODIFICATION_PIECE_SUIVANTE, anciennePieceSuivante, this.pieceSuivante);
     }
 
+    public void gererCollision() {
+        if (this.pieceActuelle != null) {
+            this.tas.ajouterElements(this.pieceActuelle);
+            this.tas.supprimerLignesCompletes();
+            this.setPieceSuivante(UsineDePiece.genererTetromino());
+        }
+    }
+
+    /**
+     * @param listener l'écouteur à ajouter
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         this.pcs.addPropertyChangeListener(listener);
     }
 
+    /**
+     * @param listener l'écouteur à supprimer
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
     }
@@ -102,7 +139,6 @@ public class Puits {
         StringBuilder sb = new StringBuilder();
         sb.append("Puits : Dimension ").append(this.largeur).append(" x ").append(this.profondeur).append("\n");
         sb.append("Piece Actuelle : ").append(this.pieceActuelle == null ? "<aucune>" : this.pieceActuelle.toString());
-        // Normalisation de la fin de ligne
         if (this.pieceActuelle != null && !sb.toString().endsWith("\n")) {
             sb.append("\n");
         }

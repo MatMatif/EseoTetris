@@ -5,10 +5,18 @@ import fr.eseo.e3.poo.projet.blox.modele.Couleur;
 import fr.eseo.e3.poo.projet.blox.modele.Element;
 
 public class ZTetromino extends Tetromino {
+    /**
+     * @param coordonnees les coordonnées de la pièce
+     * @param couleur la couleur de la pièce
+     */
     public ZTetromino(Coordonnees coordonnees, Couleur couleur) {
         super(coordonnees, couleur);
     }
 
+    /**
+     * @param coordonnees les coordonnées de référence
+     * @param couleur la couleur des éléments
+     */
     @Override
     protected void setElements(Coordonnees coordonnees, Couleur couleur) {
         int x = coordonnees.getAbscisse();

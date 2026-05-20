@@ -7,10 +7,18 @@ import fr.eseo.e3.poo.projet.blox.modele.Element;
 
 public class OTetromino extends Tetromino {
 
+    /**
+     * @param coordonnees les coordonnées de la pièce
+     * @param couleur la couleur de la pièce
+     */
     public OTetromino(Coordonnees coordonnees, Couleur couleur) {
         super(coordonnees, couleur);
     }
 
+    /**
+     * @param coordonnees les coordonnées de référence
+     * @param couleur la couleur des éléments
+     */
     @Override
     protected void setElements(Coordonnees coordonnees, Couleur couleur) {
         int x = coordonnees.getAbscisse();
@@ -23,8 +31,10 @@ public class OTetromino extends Tetromino {
         getElements().add(new Element(x + 1, y - 1, couleur));
     }
 
+    /**
+     * @param sensHoraire vrai pour une rotation horaire, faux pour anti-horaire
+     */
     @Override
     public void tourner(boolean sensHoraire) throws BloxException {
-        // Le OTetromino ne tourne pas
     }
 }

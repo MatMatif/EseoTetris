@@ -1,7 +1,8 @@
 package fr.eseo.e3.poo.projet.blox.vue;
 
-import fr.eseo.e3.poo.projet.blox.controleur.PieceDeplacement;
+import fr.eseo.e3.poo.projet.blox.controleur.PieceClavier;
 import fr.eseo.e3.poo.projet.blox.controleur.PieceRotation;
+import fr.eseo.e3.poo.projet.blox.modele.Element;
 import fr.eseo.e3.poo.projet.blox.modele.Puits;
 import fr.eseo.e3.poo.projet.blox.modele.pieces.Piece;
 
@@ -19,27 +20,32 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
     private Puits puits;
     private int taille;
     private VuePiece vuePiece;
-    private PieceDeplacement pieceDeplacement;
     private PieceRotation pieceRotation;
+    private PieceClavier pieceClavier;
 
+    /**
+     * @param puits le modèle du puits de jeu à afficher
+     */
     public VuePuits(Puits puits) {
         this(puits, TAILLE_PAR_DEFAUT);
     }
 
+    /**
+     * @param puits le modèle du puits de jeu à afficher
+     * @param taille la taille en pixels de chaque cellule du puits
+     */
     public VuePuits(Puits puits, int taille) {
         this.taille = taille;
         this.setBackground(Color.WHITE);
-        this.pieceDeplacement = new PieceDeplacement(this);
-        this.addMouseMotionListener(this.pieceDeplacement);
-        this.addMouseListener(this.pieceDeplacement);
-        this.addMouseWheelListener(this.pieceDeplacement);
+
         this.pieceRotation = new PieceRotation(this);
         this.addMouseListener(this.pieceRotation);
-        this.setPuits(puits);
-    }
 
-    public Puits getPuits() {
-        return puits;
+        this.pieceClavier = new PieceClavier(this);
+        this.addKeyListener(this.pieceClavier);
+        this.setFocusable(true);
+
+        this.setPuits(puits);
     }
 
     public void setPuits(Puits puits) {
@@ -47,11 +53,11 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
             this.puits.removePropertyChangeListener(this);
         }
         this.puits = puits;
-        if (this.pieceDeplacement != null) {
-            this.pieceDeplacement.setPuits(puits);
-        }
         if (this.pieceRotation != null) {
             this.pieceRotation.setPuits(puits);
+        }
+        if (this.pieceClavier != null) {
+            this.pieceClavier.setPuits(puits);
         }
         if (this.puits != null) {
             this.puits.addPropertyChangeListener(this);
@@ -62,10 +68,17 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         }
     }
 
+    public Puits getPuits() {
+        return puits;
+    }
+
     public int getTaille() {
         return taille;
     }
 
+    /**
+     * @param taille la nouvelle dimension en pixels pour les cellules du puits
+     */
     public void setTaille(int taille) {
         this.taille = taille;
         this.updatePreferredSize();
@@ -75,6 +88,9 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         return vuePiece;
     }
 
+    /**
+     * @param vuePiece la nouvelle représentation graphique de la pièce à afficher
+     */
     private void setVuePiece(VuePiece vuePiece) {
         this.vuePiece = vuePiece;
     }
@@ -85,6 +101,9 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * @param g le contexte graphique utilisé pour dessiner le puits et son contenu
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -98,6 +117,16 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
             for (int y = 0; y <= puits.getProfondeur(); y++) {
                 g2D.drawLine(0, y * taille, puits.getLargeur() * taille, y * taille);
             }
+
+            if (this.puits.getTas() != null) {
+                for (Element e : this.puits.getTas().getElements()) {
+                    Color couleurBase = e.getCouleur().getCouleurPourAffichage();
+                    g2D.setColor(couleurBase);
+                    g2D.fill3DRect(e.getCoordonnees().getAbscisse() * taille,
+                                   e.getCoordonnees().getOrdonnee() * taille,
+                                   taille, taille, true);
+                }
+            }
         }
 
         if (this.vuePiece != null) {
@@ -106,6 +135,9 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         g2D.dispose();
     }
 
+    /**
+     * @param evt l'événement de modification de propriété provenant du modèle (puits)
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (Puits.MODIFICATION_PIECE_ACTUELLE.equals(evt.getPropertyName())) {

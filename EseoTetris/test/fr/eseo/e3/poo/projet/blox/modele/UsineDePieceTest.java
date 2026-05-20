@@ -18,8 +18,8 @@ public class UsineDePieceTest {
         
         Tetromino t1 = UsineDePiece.genererTetromino();
         assertTrue(t1 instanceof OTetromino, "La première pièce en mode CYCLIC doit être OTetromino");
-        assertEquals(2, t1.getElements()[0].getCoordonnees().getAbscisse());
-        assertEquals(3, t1.getElements()[0].getCoordonnees().getOrdonnee());
+        assertEquals(2, t1.getElements().get(0).getCoordonnees().getAbscisse());
+        assertEquals(3, t1.getElements().get(0).getCoordonnees().getOrdonnee());
 
         Tetromino t2 = UsineDePiece.genererTetromino();
         assertTrue(t2 instanceof ITetromino, "La deuxième pièce en mode CYCLIC doit être ITetromino");
@@ -43,7 +43,7 @@ public class UsineDePieceTest {
     public void testCoordonneesInitiales() {
         UsineDePiece.setMode(UsineDePiece.ALEATOIRE_PIECE);
         Tetromino t = UsineDePiece.genererTetromino();
-        assertEquals(2, t.getElements()[0].getCoordonnees().getAbscisse(), "L'abscisse initiale doit être 2");
-        assertEquals(3, t.getElements()[0].getCoordonnees().getOrdonnee(), "L'ordonnée initiale doit être 3");
+        assertEquals(2, t.getElements().get(0).getCoordonnees().getAbscisse(), "L'abscisse initiale doit être 2");
+        assertEquals(3, t.getElements().get(0).getCoordonnees().getOrdonnee(), "L'ordonnée initiale doit être 3");
     }
 }

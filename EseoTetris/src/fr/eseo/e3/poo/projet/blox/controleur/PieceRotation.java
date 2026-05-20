@@ -10,18 +10,27 @@ import java.awt.event.MouseEvent;
 
 public class PieceRotation extends MouseAdapter {
 
-    private VuePuits vuePuits;
+    private final VuePuits vuePuits;
     private Puits puits;
 
+    /**
+     * @param vuePuits la vue du puits associée
+     */
     public PieceRotation(VuePuits vuePuits) {
         this.vuePuits = vuePuits;
         this.puits = vuePuits.getPuits();
     }
 
+    /**
+     * @param puits le nouveau puits à contrôler
+     */
     public void setPuits(Puits puits) {
         this.puits = puits;
     }
 
+    /**
+     * @param e l'événement souris
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         if (this.puits != null && this.puits.getPieceActuelle() != null) {
@@ -33,7 +42,6 @@ public class PieceRotation extends MouseAdapter {
                 }
                 this.vuePuits.repaint();
             } catch (BloxException ex) {
-                // Rotation impossible (collision ou sortie)
             }
         }
     }

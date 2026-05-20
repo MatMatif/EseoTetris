@@ -29,7 +29,7 @@ public class PieceRotationTest {
             puits.getPieceActuelle().setPosition(5, 5);
         }
 
-        // VuePuits enregistre automatiquement PieceRotation (et PieceDeplacement)
+        // VuePuits enregistre automatiquement PieceRotation
         VuePuits vuePuits = new VuePuits(puits, 30);
         
         frame.add(vuePuits);

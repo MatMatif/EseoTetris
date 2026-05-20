@@ -22,9 +22,11 @@ public class UsineDePiece {
     private static final Random random = new Random();
 
     private UsineDePiece() {
-        // Constructeur privé pour empêcher l'instanciation
     }
 
+    /**
+     * @param mode le mode de génération
+     */
     public static void setMode(int mode) {
         UsineDePiece.mode = mode;
         if (mode == CYCLIC) {
@@ -44,7 +46,7 @@ public class UsineDePiece {
             type = cyclicIndex;
             cyclicIndex = (cyclicIndex + 1) % 7;
             couleur = getCouleurParDefaut(type);
-        } else { // ALEATOIRE_PIECE (par défaut)
+        } else {
             type = random.nextInt(7);
             couleur = getCouleurParDefaut(type);
         }
@@ -61,6 +63,9 @@ public class UsineDePiece {
         }
     }
 
+    /**
+     * @param type le type de tetromino
+     */
     private static Couleur getCouleurParDefaut(int type) {
         switch (type) {
             case 0: return Couleur.ROUGE;

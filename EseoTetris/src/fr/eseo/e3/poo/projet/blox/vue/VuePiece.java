@@ -12,11 +12,18 @@ public class VuePiece {
     private final Piece piece;
     private final int taille;
 
+    /**
+     * @param piece la pièce à représenter graphiquement
+     * @param taille la taille en pixels de chaque élément de la pièce
+     */
     public VuePiece(Piece piece, int taille) {
         this.piece = piece;
         this.taille = taille;
     }
 
+    /**
+     * @param couleur la couleur d'origine à éclaircir
+     */
     public Color teinte(Color couleur) {
         int r = couleur.getRed();
         int g = couleur.getGreen();
@@ -29,6 +36,9 @@ public class VuePiece {
         return new Color(r, g, b);
     }
 
+    /**
+     * @param g2D le contexte graphique 2D utilisé pour dessiner la pièce
+     */
     protected void afficherPiece(Graphics2D g2D) {
         java.util.List<Element> elements = piece.getElements();
         for (int i = 0; i < elements.size(); i++) {

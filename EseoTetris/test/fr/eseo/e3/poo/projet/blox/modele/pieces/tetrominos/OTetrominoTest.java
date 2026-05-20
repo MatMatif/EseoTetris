@@ -65,14 +65,14 @@ public class OTetrominoTest {
         o.tourner(true);
         for(int idx = 0; idx < 4; idx++) {
             assertEquals(initiales.get(idx).getAbscisse(), o.getElements().get(idx).getCoordonnees().getAbscisse());
-            assertEquals(initiales.get(idx).getOrdonnee(), o.getElements().get(idx).getOrdonnee());
+            assertEquals(initiales.get(idx).getOrdonnee(), o.getElements().get(idx).getCoordonnees().getOrdonnee());
         }
 
         // Sens anti-horaire
         o.tourner(false);
         for(int idx = 0; idx < 4; idx++) {
             assertEquals(initiales.get(idx).getAbscisse(), o.getElements().get(idx).getCoordonnees().getAbscisse());
-            assertEquals(initiales.get(idx).getOrdonnee(), o.getElements().get(idx).getOrdonnee());
+            assertEquals(initiales.get(idx).getOrdonnee(), o.getElements().get(idx).getCoordonnees().getOrdonnee());
         }
     }
 

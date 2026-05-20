@@ -65,6 +65,9 @@ public class FallingBloxVersion1 {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
 
+                // Permettre la capture des événements clavier
+                vuePuits.requestFocusInWindow();
+
                 // 4. Initialisation du jeu
                 puits.setPieceSuivante(UsineDePiece.genererTetromino());
                 puits.setPieceSuivante(UsineDePiece.genererTetromino());
@@ -76,8 +79,12 @@ public class FallingBloxVersion1 {
                         if (puits.getPieceActuelle() != null) {
                             try {
                                 puits.getPieceActuelle().deplacerDe(0, 1);
-                            } catch (IllegalArgumentException | BloxException ex) {
-                                // Gérer collision / fin de chute
+                            } catch (BloxException ex) {
+                                if (ex.getType() == BloxException.BLOX_COLLISION) {
+                                    puits.gererCollision();
+                                }
+                            } catch (IllegalArgumentException ex) {
+                                // Ne devrait pas arriver avec deltaY=1
                             }
                             vuePuits.repaint();
                         }

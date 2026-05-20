@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Tetromino implements Piece {
-    private List<Element> elements;
+    private final List<Element> elements;
     private Puits puits;
 
+    /**
+     * @param coordonnees les coordonnées de la pièce
+     * @param couleur la couleur de la pièce
+     */
     public Tetromino(Coordonnees coordonnees, Couleur couleur) {
         this.elements = new ArrayList<>();
         this.setElements(coordonnees, couleur);
@@ -20,8 +24,16 @@ public abstract class Tetromino implements Piece {
         return elements;
     }
 
+    /**
+     * @param coordonnees les coordonnées de référence
+     * @param couleur la couleur des éléments
+     */
     protected abstract void setElements(Coordonnees coordonnees, Couleur couleur);
 
+    /**
+     * @param abscisse la nouvelle abscisse
+     * @param ordonnee la nouvelle ordonnée
+     */
     @Override
     public void setPosition(int abscisse, int ordonnee) {
         this.setElements(new Coordonnees(abscisse, ordonnee), this.elements.get(0).getCouleur());
@@ -32,11 +44,18 @@ public abstract class Tetromino implements Piece {
         return puits;
     }
 
+    /**
+     * @param puits le puits dans lequel se trouve la pièce
+     */
     @Override
     public void setPuits(Puits puits) {
         this.puits = puits;
     }
 
+    /**
+     * @param deltaX le déplacement horizontal
+     * @param deltaY le déplacement vertical
+     */
     @Override
     public void deplacerDe(int deltaX, int deltaY) throws IllegalArgumentException, BloxException {
         if (deltaY < 0) {
@@ -71,6 +90,9 @@ public abstract class Tetromino implements Piece {
         }
     }
 
+    /**
+     * @param sensHoraire vrai pour une rotation horaire, faux pour anti-horaire
+     */
     @Override
     public void tourner(boolean sensHoraire) throws BloxException {
         Element refElement = this.elements.get(0);
