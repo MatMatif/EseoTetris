@@ -1,0 +1,36 @@
+  1. Le "Magic Import" via LLM (OCR & Parsing)
+  Au lieu de créer manuellement des parseurs pour chaque banque ou de copier-coller du JSON :
+   * L'idée : Permettre à l'utilisateur de glisser un PDF de relevé bancaire ou une capture d'écran de trade (Steam, CSFloat, Binance) et laisser un LLM (via l'API Gemini que tu as déjà) extraire les données.
+   * Application dans BecomeRich : Dans ta page Import.js (Bank Statements), ajouter une zone "Analyse IA" qui transforme n'importe quel document en transactions structurées sans avoir à configurer de colonnes
+     CSV.
+
+  2. Conversion Multi-Devises Historique
+  TaxHacker gère 170 devises et les cryptos avec les taux historiques.
+   * L'idée : Actuellement, tu as une gestion simplifiée du taux USD/EUR. Tu pourrais intégrer un service de change plus robuste qui stocke les taux historiques.
+   * Application dans BecomeRich : Si tu achètes un skin en CNY (Yuan) sur Buff ou un ETF en USD, l'application irait chercher le taux exact du jour de la transaction pour calculer ta plus-value réelle en EUR
+     dans le dashboard.
+
+  3. Déduplication Intelligente (Deduplication Workflow)
+  C'est une fonctionnalité que TaxHacker vient de mettre à jour.
+   * L'idée : Quand on importe souvent des relevés, on se retrouve avec des doublons. Une logique de déduplication "intelligente" compare non seulement l'ID, mais aussi la date (à +/- 1 jour), le montant et le
+     marchand.
+   * Application dans BecomeRich : Améliorer ton transactionService.js pour qu'il propose à l'utilisateur de "fusionner" ou "ignorer" les transactions qui ressemblent à des doublons lors des imports de relevés
+     bancaires.
+
+  4. Pièces Jointes et Preuves d'Achat
+  TaxHacker lie chaque transaction à un document (PDF/Image).
+   * L'idée : Pouvoir stocker une capture d'écran de l'item CS:GO ou du certificat de l'ETF directement dans la base.
+   * Application dans BecomeRich : Dans LongTermPosition, ajouter un champ imageUrl ou documentPath. Ça permet de garder une trace visuelle de l'état d'un skin (pattern, stickers) ou d'un ordre de bourse.
+
+  5. Catégorisation Automatique par IA
+   * L'idée : TaxHacker utilise l'IA pour deviner si une dépense est "Logement", "Loisir", ou "Investissement".
+   * Application dans BecomeRich : Pour tes relevés bancaires, l'IA pourrait automatiquement taguer les virements vers Degiro ou Coinbase comme "Investissement", et tes achats Steam comme "Loisir", rendant ton
+     dashboard Categories.js beaucoup plus précis sans effort.
+
+  6. Support des LLM Locaux (Ollama / LM Studio)
+   * L'idée : Permettre aux utilisateurs soucieux de leur vie privée de ne pas envoyer leurs données financières à Google ou OpenAI.
+   * Application dans BecomeRich : Ajouter une option dans Settings.js pour configurer un endpoint d'API compatible OpenAI (comme Ollama) pour l'analyse des transactions.
+
+  Ma recommandation pour la prochaine étape :
+  L'implémentation d'un "Parser de Reçus/Screenshots" via Gemini serait la fonctionnalité la plus impressionnante. Tu pourrais simplement uploader un screenshot de ton inventaire Steam ou d'un mail de
+  confirmation d'ordre de bourse, et BecomeRich créerait la position automatiquement.
