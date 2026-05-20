@@ -2,7 +2,6 @@ package fr.eseo.e3.poo.projet.blox.vue;
 
 import fr.eseo.e3.poo.projet.blox.controleur.PieceClavier;
 import fr.eseo.e3.poo.projet.blox.controleur.PieceRotation;
-import fr.eseo.e3.poo.projet.blox.modele.Element;
 import fr.eseo.e3.poo.projet.blox.modele.Puits;
 import fr.eseo.e3.poo.projet.blox.modele.pieces.Piece;
 
@@ -20,20 +19,14 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
     private Puits puits;
     private int taille;
     private VuePiece vuePiece;
+    private VueTas vueTas;
     private PieceRotation pieceRotation;
     private PieceClavier pieceClavier;
 
-    /**
-     * @param puits le modèle du puits de jeu à afficher
-     */
     public VuePuits(Puits puits) {
         this(puits, TAILLE_PAR_DEFAUT);
     }
 
-    /**
-     * @param puits le modèle du puits de jeu à afficher
-     * @param taille la taille en pixels de chaque cellule du puits
-     */
     public VuePuits(Puits puits, int taille) {
         this.taille = taille;
         this.setBackground(Color.WHITE);
@@ -62,10 +55,18 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         if (this.puits != null) {
             this.puits.addPropertyChangeListener(this);
             this.updatePreferredSize();
+
+            if (this.puits.getTas() != null) {
+                this.vueTas = new VueTas(this.puits.getTas(), this.taille);
+            } else {
+                this.vueTas = null;
+            }
+
             if (this.puits.getPieceActuelle() != null) {
                 this.setVuePiece(new VuePiece(this.puits.getPieceActuelle(), this.taille));
             }
         }
+        this.repaint();
     }
 
     public Puits getPuits() {
@@ -76,21 +77,24 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         return taille;
     }
 
-    /**
-     * @param taille la nouvelle dimension en pixels pour les cellules du puits
-     */
     public void setTaille(int taille) {
         this.taille = taille;
         this.updatePreferredSize();
+        if (this.puits != null) {
+            if (this.puits.getTas() != null) {
+                this.vueTas = new VueTas(this.puits.getTas(), this.taille);
+            }
+            if (this.puits.getPieceActuelle() != null) {
+                 this.setVuePiece(new VuePiece(this.puits.getPieceActuelle(), this.taille));
+            }
+        }
+        this.repaint();
     }
 
     public VuePiece getVuePiece() {
         return vuePiece;
     }
 
-    /**
-     * @param vuePiece la nouvelle représentation graphique de la pièce à afficher
-     */
     private void setVuePiece(VuePiece vuePiece) {
         this.vuePiece = vuePiece;
     }
@@ -101,9 +105,6 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         }
     }
 
-    /**
-     * @param g le contexte graphique utilisé pour dessiner le puits et son contenu
-     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -118,14 +119,8 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
                 g2D.drawLine(0, y * taille, puits.getLargeur() * taille, y * taille);
             }
 
-            if (this.puits.getTas() != null) {
-                for (Element e : this.puits.getTas().getElements()) {
-                    Color couleurBase = e.getCouleur().getCouleurPourAffichage();
-                    g2D.setColor(couleurBase);
-                    g2D.fill3DRect(e.getCoordonnees().getAbscisse() * taille,
-                                   e.getCoordonnees().getOrdonnee() * taille,
-                                   taille, taille, true);
-                }
+            if (this.vueTas != null) {
+                this.vueTas.afficher(g2D);
             }
         }
 
@@ -135,9 +130,6 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         g2D.dispose();
     }
 
-    /**
-     * @param evt l'événement de modification de propriété provenant du modèle (puits)
-     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (Puits.MODIFICATION_PIECE_ACTUELLE.equals(evt.getPropertyName())) {
@@ -147,6 +139,8 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
             } else {
                 this.setVuePiece(null);
             }
+            this.repaint();
+        } else if (Puits.MODIFICATION_PIECE_SUIVANTE.equals(evt.getPropertyName())) {
             this.repaint();
         }
     }
