@@ -72,6 +72,15 @@ public class Gravite implements ActionListener, PropertyChangeListener {
             }
             return;
         }
+        if (Puits.MODIFICATION_PAUSE.equals(evt.getPropertyName())) {
+            boolean pause = (boolean) evt.getNewValue();
+            if (pause) {
+                this.timer.stop();
+            } else {
+                this.timer.start();
+            }
+            return;
+        }
         if (!Puits.MODIFICATION_LIGNES_COMPLETES.equals(evt.getPropertyName())) {
             return;
         }

@@ -34,11 +34,14 @@ public class PieceClavier extends KeyAdapter {
 
         try {
             switch (event.getKeyCode()) {
+                case KeyEvent.VK_E:
+                    puits.togglePause();
+                    break;
                 case KeyEvent.VK_LEFT:
-                    puits.getPieceActuelle().deplacerDe(-1, 0);
+                    if (!puits.isPause()) puits.getPieceActuelle().deplacerDe(-1, 0);
                     break;
                 case KeyEvent.VK_RIGHT:
-                    puits.getPieceActuelle().deplacerDe(1, 0);
+                    if (!puits.isPause()) puits.getPieceActuelle().deplacerDe(1, 0);
                     break;
                 case KeyEvent.VK_DOWN:
                     puits.gravite();
@@ -47,16 +50,16 @@ public class PieceClavier extends KeyAdapter {
                     puits.descenteDirecte();
                     break;
                 case KeyEvent.VK_UP:
-                    puits.getPieceActuelle().tourner(true);
+                    if (!puits.isPause()) puits.getPieceActuelle().tourner(true);
                     break;
                 case KeyEvent.VK_SPACE:
-                    puits.getPieceActuelle().tourner(false);
+                    if (!puits.isPause()) puits.getPieceActuelle().tourner(false);
                     break;
                 case KeyEvent.VK_C:
                     // EXTENSION (section 4.1) : Hold — stocke la pièce actuelle.
                     // Le verrou "une fois par tour" est géré dans Puits.stocker()
                     // et réarmé par Puits.gererCollision() à la prochaine pose.
-                    puits.stocker();
+                    if (!puits.isPause()) puits.stocker();
                     break;
                 default:
                     return;

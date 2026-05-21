@@ -148,6 +148,13 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
             String msg = "GAME OVER";
             int strWidth = g2D.getFontMetrics().stringWidth(msg);
             g2D.drawString(msg, (getWidth() - strWidth) / 2, getHeight() / 2);
+        } else if (this.puits != null && this.puits.isPause()) {
+            g2D.setColor(new Color(0, 0, 0, 100));
+            g2D.fillRect(0, 0, getWidth(), getHeight());
+            g2D.setColor(Color.WHITE);
+            String msg = "PAUSE";
+            int strWidth = g2D.getFontMetrics().stringWidth(msg);
+            g2D.drawString(msg, (getWidth() - strWidth) / 2, getHeight() / 2);
         }
 
         g2D.dispose();
@@ -164,7 +171,8 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
             }
             this.repaint();
         } else if (Puits.MODIFICATION_PIECE_SUIVANTE.equals(evt.getPropertyName()) ||
-                   Puits.MODIFICATION_FIN_PARTIE.equals(evt.getPropertyName())) {
+                   Puits.MODIFICATION_FIN_PARTIE.equals(evt.getPropertyName()) ||
+                   Puits.MODIFICATION_PAUSE.equals(evt.getPropertyName())) {
             this.repaint();
         }
     }

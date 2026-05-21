@@ -14,6 +14,7 @@ public class Puits {
     public static final String MODIFICATION_SCORE = "score";
     public static final String MODIFICATION_LIGNES_COMPLETES = "lignesCompletes";
     public static final String MODIFICATION_FIN_PARTIE = "finPartie";
+    public static final String MODIFICATION_PAUSE = "pause";
 
     private int largeur;
     private int profondeur;
@@ -22,6 +23,7 @@ public class Puits {
     private Piece pieceStockee;       // EXTENSION (section 4.1) : Hold
     private boolean peutStocker = true; // verrou « une fois par tour »
     private boolean finPartie = false;
+    private boolean pause = false;
     private PropertyChangeSupport pcs;
     private Tas tas;
     private int score;
@@ -80,6 +82,25 @@ public class Puits {
         return this.finPartie;
     }
 
+    /**
+     * @return true si la partie est en pause
+     */
+    public boolean isPause() {
+        return this.pause;
+    }
+
+    /**
+     * Bascule l'état de pause de la partie.
+     */
+    public void togglePause() {
+        if (this.finPartie) {
+            return;
+        }
+        boolean oldPause = this.pause;
+        this.pause = !this.pause;
+        this.pcs.firePropertyChange(MODIFICATION_PAUSE, oldPause, this.pause);
+    }
+
     public void setPieceSuivante(Piece piece) {
         if (this.pieceSuivante != null) {
             Piece anciennePieceActuelle = this.pieceActuelle;
@@ -89,7 +110,7 @@ public class Puits {
             // Vérification de collision immédiate (Fin de partie)
             for (Element element : this.pieceActuelle.getElements()) {
                 Coordonnees coords = element.getCoordonnees();
-                if (coords.getOrdonnee() >= 0 && this.tas.elementExists(coords.getAbscisse(), coords.getOrdonnee())) {
+                if (this.tas.elementExists(coords.getAbscisse(), coords.getOrdonnee())) {
                     this.finPartie = true;
                     break;
                 }
@@ -137,7 +158,7 @@ public class Puits {
      * la collision est gérée automatiquement.
      */
     public void gravite() {
-        if (this.pieceActuelle == null || this.finPartie) {
+        if (this.pieceActuelle == null || this.finPartie || this.pause) {
             return;
         }
         try {
@@ -156,11 +177,11 @@ public class Puits {
      * survienne et qu'une nouvelle pièce soit mise en jeu.
      */
     public void descenteDirecte() {
-        if (this.pieceActuelle == null || this.finPartie) {
+        if (this.pieceActuelle == null || this.finPartie || this.pause) {
             return;
         }
         Piece p = this.pieceActuelle;
-        while (this.pieceActuelle == p && !this.finPartie) {
+        while (this.pieceActuelle == p && !this.finPartie && !this.pause) {
             this.gravite();
         }
     }
@@ -169,6 +190,16 @@ public class Puits {
         if (this.pieceActuelle == null) {
             return;
         }
+
+        // EXTENSION (Fin de partie) : Si la pièce est bloquée alors qu'elle est 
+        // encore partiellement ou totalement hors du puits (y < 0).
+        for (Element element : this.pieceActuelle.getElements()) {
+            if (element.getCoordonnees().getOrdonnee() < 0) {
+                this.finPartie = true;
+                break;
+            }
+        }
+
         this.tas.ajouterElements(this.pieceActuelle);
         int lignesSupprimees = this.tas.supprimerLignesCompletes();
         if (lignesSupprimees > 0) {
@@ -188,10 +219,16 @@ public class Puits {
             this.nbLignesCompletes += lignesSupprimees;
             this.pcs.firePropertyChange(MODIFICATION_LIGNES_COMPLETES, oldLignes, this.nbLignesCompletes);
         }
-        this.setPieceSuivante(UsineDePiece.genererTetromino());
-        // EXTENSION (section 4.1) : nouvelle pièce en jeu → on autorise
-        // à nouveau le stockage pour le tour suivant.
-        this.peutStocker = true;
+
+        if (this.finPartie) {
+            this.pieceActuelle = null;
+            this.pcs.firePropertyChange(MODIFICATION_FIN_PARTIE, false, true);
+        } else {
+            this.setPieceSuivante(UsineDePiece.genererTetromino());
+            // EXTENSION (section 4.1) : nouvelle pièce en jeu → on autorise
+            // à nouveau le stockage pour le tour suivant.
+            this.peutStocker = true;
+        }
     }
 
     /**
