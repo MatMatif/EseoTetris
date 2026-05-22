@@ -53,4 +53,28 @@ public class VuePiece {
                            taille, taille, true);
         }
     }
+
+    /**
+     * Affiche l'image fantôme de la pièce à une position verticale décalée.
+     * @param g2D le contexte graphique
+     * @param deltaY le décalage vertical en nombre de cases
+     */
+    public void afficherFantome(Graphics2D g2D, int deltaY) {
+        java.util.List<Element> elements = piece.getElements();
+        for (int i = 0; i < elements.size(); i++) {
+            Color couleurBase = elements.get(i).getCouleur().getCouleurPourAffichage();
+            
+            Color couleurFond = new Color(couleurBase.getRed(), couleurBase.getGreen(), couleurBase.getBlue(), 40);
+            g2D.setColor(couleurFond);
+            g2D.fillRect(elements.get(i).getCoordonnees().getAbscisse() * taille,
+                         (elements.get(i).getCoordonnees().getOrdonnee() + deltaY) * taille,
+                         taille, taille);
+
+            Color couleurBordure = new Color(couleurBase.getRed(), couleurBase.getGreen(), couleurBase.getBlue(), 120);
+            g2D.setColor(couleurBordure);
+            g2D.drawRect(elements.get(i).getCoordonnees().getAbscisse() * taille,
+                         (elements.get(i).getCoordonnees().getOrdonnee() + deltaY) * taille,
+                         taille, taille);
+        }
+    }
 }

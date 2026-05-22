@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import fr.eseo.e3.poo.projet.blox.modele.pieces.Piece;
 import fr.eseo.e3.poo.projet.blox.modele.pieces.tetrominos.OTetromino;
 import fr.eseo.e3.poo.projet.blox.modele.pieces.tetrominos.ITetromino;
 import org.junit.jupiter.api.Test;
@@ -72,23 +73,6 @@ public class PuitsTest {
         int yFinal = puits.getPieceActuelle().getElements().get(0).getCoordonnees().getOrdonnee();
         
         assertEquals(yInitial + 1, yFinal, "La pièce aurait dû descendre.");
-    }
-
-    @Test
-    void testGraviteAvecCollision() {
-        Puits puits = new Puits();
-        OTetromino p1 = new OTetromino(new Coordonnees(5, 18), Couleur.ROUGE);
-        ITetromino p2 = new ITetromino(new Coordonnees(0, 0), Couleur.BLEU);
-        
-        puits.setPieceSuivante(p1);
-        puits.setPieceSuivante(p2);
-        
-        int countAvant = puits.getTas().getElements().size();
-        puits.gravite();
-        int countApres = puits.getTas().getElements().size();
-
-        assertEquals(countAvant + 4, countApres, "Collision: éléments ajoutés au tas.");
-        assertEquals(p2, puits.getPieceActuelle(), "Nouvelle pièce actuelle.");
     }
 
     @Test

@@ -3,6 +3,7 @@ package fr.eseo.e3.poo.projet.blox.vue;
 import fr.eseo.e3.poo.projet.blox.controleur.PieceClavier;
 import fr.eseo.e3.poo.projet.blox.controleur.PieceDeplacement;
 import fr.eseo.e3.poo.projet.blox.controleur.PieceRotation;
+import fr.eseo.e3.poo.projet.blox.modele.Element;
 import fr.eseo.e3.poo.projet.blox.modele.Puits;
 import fr.eseo.e3.poo.projet.blox.modele.pieces.Piece;
 
@@ -138,6 +139,21 @@ public class VuePuits extends JPanel implements PropertyChangeListener {
         }
 
         if (this.vuePiece != null) {
+            // Calcul de la position d'atterrissage (image fantôme)
+            int deltaY = 0;
+            boolean collision = false;
+            while (!collision) {
+                deltaY++;
+                for (Element element : this.puits.getPieceActuelle().getElements()) {
+                    int nextY = element.getCoordonnees().getOrdonnee() + deltaY;
+                    int x = element.getCoordonnees().getAbscisse();
+                    if (nextY >= this.puits.getProfondeur() || this.puits.getTas().elementExists(x, nextY)) {
+                        collision = true;
+                        break;
+                    }
+                }
+            }
+            this.vuePiece.afficherFantome(g2D, deltaY - 1);
             this.vuePiece.afficherPiece(g2D);
         }
 
